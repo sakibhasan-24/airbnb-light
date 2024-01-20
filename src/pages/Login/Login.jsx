@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import GoogleButton from "../../components/GoogleButton";
 import useAxiosSecure from "../../hooks/Api/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -8,12 +8,13 @@ import { AuthContext } from "../../context/AuthProvider";
 export default function Login() {
   const axiosSecure = useAxiosSecure();
   const { userLogIn, loading } = useContext(AuthContext);
-  console.log(loading);
+  // console.log(loading);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
   const handleLogIn = async (e) => {
     e.preventDefault();
-
     const form = e.target;
-
     const email = form.email.value;
     const password = form.password.value;
 
@@ -27,7 +28,7 @@ export default function Login() {
         text: `${userLogInRes.user.displayName} welcome`,
         timer: 1500,
       });
-      navigate("/");
+      navigate(from, { replace: true });
     }
     // console.log(tokenResponse);
   };

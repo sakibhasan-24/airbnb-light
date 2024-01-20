@@ -6,6 +6,7 @@ import Login from "../pages/Login/Login";
 import SignUp from "../pages/Signup/SignUp";
 
 import RoomDetails from "../pages/Rooms/RoomDetails/RoomDetails";
+import Protected from "./Protected";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/room/:id",
-        element: <RoomDetails />,
+        element: (
+          <Protected>
+            <RoomDetails />
+          </Protected>
+        ),
       },
     ],
   },
