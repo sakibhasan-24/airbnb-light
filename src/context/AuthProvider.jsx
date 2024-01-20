@@ -49,7 +49,7 @@ export default function AuthProvider({ children }) {
       // setLoading(false);
       setUser(currentUser);
       if (currentUser) {
-        console.log(currentUser);
+        // console.log(currentUser);
         // const userInfo = { name: currentUser.name, email: currentUser.email };
         // useAxios.post("/jwt", userInfo).then((res) => {
         //   if (res.data.token) {

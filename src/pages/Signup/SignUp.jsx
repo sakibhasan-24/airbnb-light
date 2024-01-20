@@ -44,21 +44,27 @@ export default function SignUp() {
     });
 
     const userCreatedResult = await createUser(email, password);
-    // console.log(userCreatedResult);
+    // console.log("f", userCreatedResult.user.email);
     await updateUserProfile(name, data.display_url);
     // console.log(userCreatedResult);
     /* save user in monhodb */
     const users = {
-      email: email,
-      name: name,
+      email: userCreatedResult.user.email,
+      name: userCreatedResult.user.displayName,
       role: "guest",
       status: "verified",
     };
     // console.log("user", users);
-    const res = await axiosSecure.put(`users/${email}`, users);
-    // console.log(res.data);
+    const res = await axiosSecure.put(`/users/${email}`, users);
+    console.log("res.data", res);
 
-    // console.log(currentUser);
+    // need a token
+    // get token
+    const tokenResponse = await axiosSecure.post(
+      "/jwt",
+      userCreatedResult.user.email
+    );
+    console.log(tokenResponse);
   };
 
   return (
