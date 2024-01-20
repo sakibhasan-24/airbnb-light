@@ -12,12 +12,13 @@ import {
 } from "firebase/auth";
 // import usePublicAxios from "../Hooks/usePublicAxios";
 import app from "../firebase/firebase.config";
+import useAxiosSecure from "../hooks/Api/useAxiosSecure";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 export default function AuthProvider({ children }) {
   const googleProvider = new GoogleAuthProvider();
-  //   const useAxios = usePublicAxios();
+  const useAxios = useAxiosSecure();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const createUser = (email, password) => {
@@ -39,8 +40,10 @@ export default function AuthProvider({ children }) {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
-  const userLogOut = () => {
-    setLoading(true);
+  const userLogOut = async () => {
+    const res = await useAxios.get("/logout");
+    // console.log("logout", res);
+    setLoading(false);
     return signOut(auth);
   };
 
@@ -49,6 +52,7 @@ export default function AuthProvider({ children }) {
       // setLoading(false);
       setUser(currentUser);
       if (currentUser) {
+        setLoading(false);
         // console.log(currentUser);
         // const userInfo = { name: currentUser.name, email: currentUser.email };
         // useAxios.post("/jwt", userInfo).then((res) => {
@@ -59,8 +63,8 @@ export default function AuthProvider({ children }) {
         // });
       } else {
         // localStorage.removeItem("token");
+
         console.log("no current User");
-        setLoading(false);
       }
     });
     return () => unSubscribe();

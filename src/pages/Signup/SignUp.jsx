@@ -6,10 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthProvider";
 import useAxiosSecure from "../../hooks/Api/useAxiosSecure";
+import { FaSpinner } from "react-icons/fa";
+import GoogleButton from "../../components/GoogleButton";
 // import GoogleLogin from "../../components/GoogleLogin";
 
 export default function SignUp() {
-  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const { createUser, updateUserProfile, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const image_key = import.meta.env.VITE_IMAGE_KEY;
@@ -44,7 +46,7 @@ export default function SignUp() {
     });
 
     const userCreatedResult = await createUser(email, password);
-    // console.log("f", userCreatedResult.user.email);
+    console.log("f", userCreatedResult.user.email);
     await updateUserProfile(name, data.display_url);
     // console.log(userCreatedResult);
     /* save user in monhodb */
@@ -56,7 +58,7 @@ export default function SignUp() {
     };
     // console.log("user", users);
     const res = await axiosSecure.put(`/users/${email}`, users);
-    console.log("res.data", res);
+    // console.log("res.data", res);
 
     // need a token
     // get token
@@ -64,7 +66,16 @@ export default function SignUp() {
       "/jwt",
       userCreatedResult.user.email
     );
-    console.log(tokenResponse);
+    navigate("/");
+    if (tokenResponse.data.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Registration successfull",
+        text: `${users.name} You can now login`,
+        timer: 1500,
+      });
+    }
+    // console.log(tokenResponse);
   };
 
   return (
@@ -107,7 +118,7 @@ export default function SignUp() {
 
           <input
             type="submit"
-            value="signUp"
+            value={"continue"}
             className="bg-slate-100 w-1/3 mx-auto cursor-pointer text-slate-800 py-4 px-8 rounded-lg hover:bg-slate-500 font-bold uppercase transition-colors duration-300"
           />
         </form>
@@ -118,6 +129,7 @@ export default function SignUp() {
           </Link>
         </p>
         {/* <GoogleLogin /> */}
+        <GoogleButton />
       </div>
     </div>
   );
