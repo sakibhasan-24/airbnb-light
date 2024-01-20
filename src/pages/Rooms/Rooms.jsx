@@ -2,25 +2,28 @@ import React, { useEffect, useState } from "react";
 import Room from "./Room";
 import { useSearchParams } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
+import useAxiosPublic from "../../hooks/Api/useAxiosPublic";
 
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [params, setParams] = useSearchParams();
   const category = params.get("category");
+  const useAxiosPublicData = useAxiosPublic();
   //   console.log(category);
   useEffect(() => {
-    fetch("/rooms.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (category) {
-          const categoryRooms = data?.filter(
-            (room) => room.category === category
-          );
-          setRooms(categoryRooms);
-        } else {
-          setRooms(data);
-        }
-      });
+    const getAllRooms = async () => {
+      const res = await useAxiosPublicData.get("/rooms");
+      const data = res.data;
+      if (category) {
+        const categoryRooms = data?.filter(
+          (room) => room.category === category
+        );
+        setRooms(categoryRooms);
+      } else {
+        setRooms(data);
+      }
+    };
+    getAllRooms();
   }, [category]);
   return (
     <div>

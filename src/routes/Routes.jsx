@@ -7,6 +7,7 @@ import SignUp from "../pages/Signup/SignUp";
 
 import RoomDetails from "../pages/Rooms/RoomDetails/RoomDetails";
 import Protected from "./Protected";
+import DashboardLayout from "../layouts/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,15 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />,
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <Protected>
+        <DashboardLayout />
+      </Protected>
+    ),
+    children: [{}],
   },
 ]);
 export default router;

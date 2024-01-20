@@ -5,17 +5,22 @@ import RoomHeading from "./RoomHeading";
 import RoomDetailsInfo from "./RoomDetailsInfo";
 import Calendar from "./DateSelect";
 import RoomReservation from "./RoomReservation";
+import useAxiosSecure from "../../../hooks/Api/useAxiosSecure";
 
 export default function RoomDetails() {
   const { id } = useParams();
   const [room, setRoom] = useState({});
+  const useAxiosSecureData = useAxiosSecure();
   useEffect(() => {
-    fetch("/rooms.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setRoom(data.find((room) => room._id === id));
-      });
+    const getARoom = async (id) => {
+      const res = await useAxiosSecureData(`/room/${id}`);
+      const data = await res.data;
+      // console.log(data);
+      setRoom(data);
+    };
+    getARoom(id);
   }, [id]);
+  console.log(room);
   return (
     <div className="max-w-6xl mx-auto  ">
       <Helmet>

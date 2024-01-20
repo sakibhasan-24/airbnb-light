@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Calendar } from "react-date-range";
 import DateSelect from "./DateSelect";
-import { formatDistance } from "date-fns";
+import { formatDistance, addDays } from "date-fns";
 
 export default function RoomReservation({ room }) {
   //   console.log(formatDistance);
@@ -9,19 +9,21 @@ export default function RoomReservation({ room }) {
 
   const fromDate = new Date(room?.from ?? new Date());
   const toDate = new Date(room?.to ?? new Date());
-
-  console.log(fromDate);
+  // console.log(fromDate);
+  // console.log(fromDate);
   const totalDays = parseInt(formatDistance(toDate, fromDate).split(" ")[0]);
+  // console.log(totalDays);
   const totalPrice = parseFloat(totalDays * room?.price);
 
   //   const totalPrice = room?.price * totalDays;
 
   const [value, setValue] = useState({
-    startDate: fromDate,
-    endDate: toDate,
+    startDate: new Date(room?.from ?? new Date()),
+    endDate: new Date(room?.to ?? addDays(new Date(), 4)),
     key: "selection",
   });
 
+  // console.log(value);
   return (
     <div className="md:ml-6  rounded-lg border-2 border-slate-400   overflow-hidden ">
       <div className="flex gap-2 sm:ml-12">
