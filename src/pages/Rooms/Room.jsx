@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Room({ room }) {
   return (
-    <div className="flex flex-col border-t-2 shadow-2xl cursor-pointer shadow-slate-800 p-2 ">
+    <Link
+      to={`/room/${room._id}`}
+      className="flex flex-col border-t-2 shadow-2xl cursor-pointer shadow-slate-800 p-2 "
+    >
       <div className="flex-1">
         <img
           src={room.image}
@@ -14,6 +18,6 @@ export default function Room({ room }) {
         <h1>{room.title}</h1>
         <p>{room.location}</p>
       </div>
-    </div>
+    </Link>
   );
 }

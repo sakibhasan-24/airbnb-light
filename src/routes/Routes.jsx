@@ -5,6 +5,8 @@ import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/Signup/SignUp";
 
+import RoomDetails from "../pages/Rooms/RoomDetails/RoomDetails";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -14,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/room/:id",
+        element: <RoomDetails />,
       },
     ],
   },
