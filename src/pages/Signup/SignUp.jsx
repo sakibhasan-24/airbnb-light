@@ -5,12 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 // import usePublicAxios from "../../Hooks/usePublicAxios";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthProvider";
+import useAxiosSecure from "../../hooks/Api/useAxiosSecure";
 // import GoogleLogin from "../../components/GoogleLogin";
 
 export default function SignUp() {
   const { createUser, updateUserProfile } = useContext(AuthContext);
   const navigate = useNavigate();
-  // const useAxious = usePublicAxios();
+  const axiosSecure = useAxiosSecure();
   const image_key = import.meta.env.VITE_IMAGE_KEY;
   // console.log(image_key);
   const image_hoisting = `https://api.imgbb.com/1/upload?key=${image_key}`;
@@ -43,9 +44,19 @@ export default function SignUp() {
     });
 
     const userCreatedResult = await createUser(email, password);
+    // console.log(userCreatedResult);
     await updateUserProfile(name, data.display_url);
-    console.log(userCreatedResult);
-    // console.log(data.display_url);
+    // console.log(userCreatedResult);
+    /* save user in monhodb */
+    const users = {
+      email: email,
+      name: name,
+      role: "guest",
+      status: "verified",
+    };
+    // console.log("user", users);
+    const res = await axiosSecure.put(`users/${email}`, users);
+    // console.log(res.data);
 
     // console.log(currentUser);
   };
