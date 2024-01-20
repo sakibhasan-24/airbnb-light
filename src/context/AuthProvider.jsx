@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 // import usePublicAxios from "../Hooks/usePublicAxios";
 import app from "../firebase/firebase.config";
@@ -26,6 +27,13 @@ export default function AuthProvider({ children }) {
   const userLogIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
+  };
+  const updateUserProfile = (name, photo) => {
+    setLoading(true);
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
   };
   const googleLogIn = () => {
     setLoading(true);
@@ -64,6 +72,7 @@ export default function AuthProvider({ children }) {
     googleLogIn,
     userLogIn,
     userLogOut,
+    updateUserProfile,
   };
   return (
     <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>
