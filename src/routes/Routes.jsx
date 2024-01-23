@@ -8,6 +8,8 @@ import SignUp from "../pages/Signup/SignUp";
 import RoomDetails from "../pages/Rooms/RoomDetails/RoomDetails";
 import Protected from "./Protected";
 import DashboardLayout from "../layouts/DashboardLayout";
+import AddRoom from "../pages/dashboard/Host/AddRoom";
+import MyListings from "../pages/dashboard/Host/MyListings";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +46,16 @@ const router = createBrowserRouter([
         <DashboardLayout />
       </Protected>
     ),
-    children: [{}],
+    children: [
+      {
+        path: "add-room",
+        element: <AddRoom />,
+      },
+      {
+        path: "my-booking",
+        element: <MyListings />,
+      },
+    ],
   },
 ]);
 export default router;
