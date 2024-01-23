@@ -8,7 +8,7 @@ export default function Table() {
   const { user } = useContext(AuthContext);
   useEffect(() => {
     const getRoomsByEmail = async (email) => {
-      console.log(email);
+      // console.log(email);
       const res = await useAxiosSecureData.get(`/rooms/${email}`);
       //   console.log(res.data);
       setRooms(res.data);

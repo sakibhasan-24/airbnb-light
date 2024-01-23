@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaBuffer } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { getRole } from "../../../helper/getRoleCall";
+import { AuthContext } from "../../../context/AuthProvider";
+import useRole from "../../../hooks/Api/useRole";
 
 export default function Sidebar() {
+  const { user } = useContext(AuthContext);
+  const [role] = useRole();
+  console.log("role", role);
   return (
     <div className="max-w-6xl mx-auto">
       <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
