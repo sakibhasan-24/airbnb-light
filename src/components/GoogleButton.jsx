@@ -4,21 +4,24 @@ import useAxiosSecure from "../hooks/Api/useAxiosSecure";
 
 export default function GoogleButton() {
   const { googleLogIn } = useContext(AuthContext);
-  const useAxiosSecureData = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const handleGoogleSignIn = async () => {
+    // console.log("googleLogIn");
     const userCreatedResult = await googleLogIn();
     const users = {
-      email: userCreatedResult.user.email,
-      name: userCreatedResult.user.displayName,
+      email: userCreatedResult?.user?.email,
+      name: userCreatedResult?.user?.displayName,
       role: "admin",
       status: "verified",
     };
-    const res = await useAxiosSecureData.put(`/users/${email}`, users);
+    const res = await axiosSecure.put(`/users/${email}`, users);
+    console.log(res.data);
     if (res.data.insertedId) {
-      const tokenResponse = await useAxiosSecure.post(
+      const tokenResponse = await axiosSecure.post(
         "/jwt",
         userCreatedResult.user.email
       );
+      console.log(tokenResponse.data);
       if (tokenResponse.data.success) {
         Swal.fire({
           icon: "success",

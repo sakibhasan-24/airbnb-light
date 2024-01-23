@@ -23,7 +23,7 @@ export default function Sidebar() {
         </div>
         <div className="flex p-4 font-bold flex-col space-y-4">
           <Link to="statistics">Statistics</Link>
-          <Link to="my-booking">My Booking</Link>
+          <Link to="my-listing">my-listing</Link>
           <Link to="add-room">Add room</Link>
         </div>
       </div>

@@ -14,6 +14,7 @@ export default function useAxiosSecure() {
       if (error.response.status === 401 || error.response.status === 403) {
         //redirect to login page
         // navigate("/login");
+        window.location.href = "/login";
       }
       return Promise.reject(error);
     }

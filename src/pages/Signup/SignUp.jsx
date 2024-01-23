@@ -64,7 +64,7 @@ export default function SignUp() {
     // get token
     const tokenResponse = await axiosSecure.post(
       "/jwt",
-      userCreatedResult.user.email
+      userCreatedResult.user?.email
     );
     navigate("/");
     if (tokenResponse.data.success) {

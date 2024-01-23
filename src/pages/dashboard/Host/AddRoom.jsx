@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import AddRoomForm from "../../Form/AddRoomForm";
 import axios from "axios";
+import { AuthContext } from "../../../context/AuthProvider";
+import useAxiosSecure from "../../../hooks/Api/useAxiosSecure";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function AddRoom() {
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const [imageText, setImageText] = useState("upload Image");
+  const [loading, setLoading] = useState(false);
   const [dates, setDates] = useState({
     endDate: new Date(),
     startDate: new Date(),
@@ -36,11 +45,46 @@ export default function AddRoom() {
         "Content-Type": "multipart/form-data",
       },
     });
-    // console.log(data.display_url);
+    // host
+    const host = {
+      name: user?.displayName,
+      email: user?.email,
+      photoURL: user?.photoURL,
+    };
+    const roomData = {
+      host,
+      location,
+      category,
+      title,
+      price,
+      image: data.display_url,
+      guests,
+      bathrooms,
+      bedrooms,
+      description,
+      to,
+      from,
+    };
+    console.table(roomData);
+    // save in the db
+    const res = await axiosSecure.post("/room", roomData);
+    console.table(res.data);
+    if (res.data.insertedId) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Room Added Successfully",
+        timer: 1500,
+      });
+      navigate("my-listing");
+    }
   };
 
   const handleDates = (ranges) => {
     setDates(ranges.selection);
+  };
+  const handleImageChange = (image) => {
+    setImageText(image.name);
   };
   return (
     <div>
@@ -51,6 +95,9 @@ export default function AddRoom() {
         handleSubmit={handleSubmit}
         dates={dates}
         handleDates={handleDates}
+        loading={loading}
+        handleImageChange={handleImageChange}
+        imageText={imageText}
       />
     </div>
   );
