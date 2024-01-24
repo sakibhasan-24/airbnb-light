@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Calendar } from "react-date-range";
 import DateSelect from "./DateSelect";
 import { formatDistance, addDays } from "date-fns";
+import BookingModal from "./Modal/BookingModal";
+import { AuthContext } from "../../../context/AuthProvider";
 
 export default function RoomReservation({ room }) {
+  const { user } = useContext(AuthContext);
+  // console.table(room);
   //   console.log(formatDistance);
   //   console.log(room?.from, room?.to);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   const fromDate = new Date(room?.from ?? new Date());
   const toDate = new Date(room?.to ?? new Date());
@@ -23,6 +37,23 @@ export default function RoomReservation({ room }) {
     key: "selection",
   });
 
+  const [bookingInfo, setBookingInfo] = useState({
+    guest: {
+      name: user?.displayName,
+      image: user?.photoURL,
+      email: user?.email,
+    },
+
+    from: value.startDate,
+    to: value.endDate,
+    price: room?.totalPrice,
+    host: room?.host?.email,
+    location: room?.location,
+    roomId: room?._id,
+    title: room?.title,
+    image: room?.image,
+  });
+  // console.log(bookingInfo);
   // console.log(value);
   return (
     <div className="md:ml-6  rounded-lg border-2 border-slate-400   overflow-hidden ">
@@ -34,7 +65,10 @@ export default function RoomReservation({ room }) {
         <DateSelect value={value} />
       </div>
       <div className="w-3/4 mx-auto my-4">
-        <button className="w-full mx-auto bg-orange-600 text-xl font-bold rounded-lg py-2 text-slate-950 hover:bg-orange-950 hover:text-slate-100 px-4">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="w-full mx-auto bg-orange-600 text-xl font-bold rounded-lg py-2 text-slate-950 hover:bg-orange-950 hover:text-slate-100 px-4"
+        >
           Reserved
         </button>
       </div>
@@ -42,6 +76,11 @@ export default function RoomReservation({ room }) {
         <h1>Total</h1>
         <h1>${totalPrice}</h1>
       </div>
+      <BookingModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        bookingInfo={bookingInfo}
+      />
     </div>
   );
 }

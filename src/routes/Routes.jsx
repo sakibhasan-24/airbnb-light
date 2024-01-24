@@ -10,6 +10,11 @@ import Protected from "./Protected";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AddRoom from "../pages/dashboard/Host/AddRoom";
 import MyListings from "../pages/dashboard/Host/MyListings";
+import HostRoute from "./HostRoute";
+// import Admin from "../pages/dashboard/Admin/Admin";
+import AdminRoutes from "./AdminRoutes";
+import ManageUser from "../pages/dashboard/Admin/ManageUser";
+import Profile from "../pages/dashboard/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -49,11 +54,41 @@ const router = createBrowserRouter([
     children: [
       {
         path: "add-room",
-        element: <AddRoom />,
+        element: (
+          <Protected>
+            <HostRoute>
+              <AddRoom />
+            </HostRoute>
+          </Protected>
+        ),
       },
       {
         path: "my-listing",
-        element: <MyListings />,
+        element: (
+          <Protected>
+            <HostRoute>
+              <MyListings />
+            </HostRoute>
+          </Protected>
+        ),
+      },
+      {
+        path: "manage-user",
+        element: (
+          <Protected>
+            <AdminRoutes>
+              <ManageUser />
+            </AdminRoutes>
+          </Protected>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <Protected>
+            <Profile />
+          </Protected>
+        ),
       },
     ],
   },
